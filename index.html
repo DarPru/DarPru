@@ -5,12 +5,14 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <!-- The above 3 meta tags *must* come first in the head; any other head content must come *after* these tags -->
-    <title>Урок 20 </title>
+    <title>Smart Agency </title>
+    <link rel="shortcut icon" href="img/fav.png" type="image/x-icon">
     <link href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@300;400;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="slick/slick-theme.css">
      <link rel="stylesheet" href="css/animate.min.css">
     <link rel="stylesheet" href="slick/slick.css">
     <script src="https://kit.fontawesome.com/23fc0874af.js" crossorigin="anonymous"></script>
+    <script src="https://api-maps.yandex.ru/2.1/?lang=ru_RU" type="text/javascript"></script>
    
     <!-- Bootstrap -->
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css" integrity="sha384-HSMxcRTRxnN+Bdg0JdbxYKrThecOKuH5zCYotlSAcp1+c8xmyTe9GYg1l9a69psu" crossorigin="anonymous">
@@ -26,6 +28,13 @@
   <body>
     <!--HEADER-->
   <header id="main">
+  	 <div class="video-container">
+      <div class="filter"></div>
+      <video autoplay loop muted playsinline src="video_bg/coverr-someone-is-writing-on-a-notebook-9447.mp4" class="fillWidth"></video>
+      <div class="poster hidden">
+        <img src="img/main-bg.png" alt="">
+      </div>
+    </div>
     <div class="container">
 
       <!--header-line-->
@@ -37,18 +46,13 @@
           </div>
         </div>
             
-        <!--nav-bar-->
-        <div class="col-lg-6 col-md-6 col-sm-6 col-xs-6 main_nav">
-          <a class="man_nav_bar" href="#">
-            <span class="line"></span>
-          </a>
-        </div>
+        
       </div> <!--header-line-->
 
       <!--Title-->
       <div class="row main_title">
         <div class="col-lg-8 col-lg-offset-2">
-          <h1 class="animate__animated animate__fadeInUp"><span>Smart</span> Agency Landign Page</h1>
+          <h1 class="animate__animated animate__fadeInUp"><span>Smart</span> Agency Landing Page</h1>
           <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Et, numquam fugiat nemo in. Repellendus est perspiciatis ad id quas voluptatibus nihil tempora sint, commodi officia sed voluptatem doloremque iste maiores obcaecati voluptas expedita laudantium voluptate.</p>
         </div>
       </div> <!--title-->
@@ -485,7 +489,37 @@
     
   </div>
 </section>
+                        <!-- CONTACT US  -->
 
+
+<section id="contact_us">
+  <div class="container">
+    <div class="row">
+      <div class="col-xs-12 text-center section_header">
+        <h2><span>Contact</span> Us</h2>
+        <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Saepe, nulla distinctio omnis voluptatum.</p>
+      </div>
+    </div>
+    <div class="row">
+      <div class="col-xs-12 col-md-6" style="background-color: rgb(54 55 58);">
+        <h3 class="text-center" style="color: #fff;"><b>How to find us</b></h3>
+        <div class="row">
+          <div class="col-xs-2"><img  class="contact_us_img" style="padding-left: 8px;" src="img/contact_us/1.png" alt=""></div>
+          <div class="col-xs-10 contact_us_text">Pushkinskaya Ulitsa, 13, St Petersburg</div>
+        </div>
+        <div class="row">
+          <div class="col-xs-2"><img class="contact_us_img" style="padding-left: 8px;" src="img/contact_us/2.png" alt=""></div>
+          <div class="col-xs-10 contact_us_text">+7 999 999 99 99</div>
+        </div>
+        <div class="row">
+          <div class="col-xs-2"><img class="contact_us_img" src="img/contact_us/3.png" alt=""></div>
+          <div class="col-xs-10 contact_us_text">ouremail.mail.com</div>
+        </div>
+      </div>
+      <div class="col-xs-12 col-md-6"><div id="map" style="width: 100%; height: 300px"></div></div>
+    </div>
+  </div>
+</section>
 
                               <!-- FOOTER -->
 
@@ -844,7 +878,103 @@ $(document).ready(function(){
       });
 
     </script>
+    <script>
+  // jQuery is required to run this code
+  $( document ).ready(function() {
+    scaleVideoContainer();
 
+    initBannerVideoSize('.video-container .poster img');
+    initBannerVideoSize('.video-container .filter');
+    initBannerVideoSize('.video-container video');
+
+    $(window).on('resize', function() {
+      scaleVideoContainer();
+      scaleBannerVideoSize('.video-container .poster img');
+      scaleBannerVideoSize('.video-container .filter');
+      scaleBannerVideoSize('.video-container video');
+    });
+  });
+
+  function scaleVideoContainer() {
+    var height = $(window).height() + 5;
+    var unitHeight = parseInt(height) + 'px';
+    $('.homepage-hero-module').css('height',unitHeight);
+  }
+
+  function initBannerVideoSize(element){
+    $(element).each(function(){
+      $(this).data('height', $(this).height());
+      $(this).data('width', $(this).width());
+    });
+
+    scaleBannerVideoSize(element);
+  }
+
+  function scaleBannerVideoSize(element) {
+
+    var windowWidth = $(window).width(),
+    windowHeight = $(window).height() + 5,
+    videoWidth,
+    videoHeight;
+
+    // console.log(windowHeight);
+
+    $(element).each(function(){
+      var videoAspectRatio = $(this).data('height')/$(this).data('width');
+
+      $(this).width(windowWidth);
+
+      if(windowWidth < 1000){
+          videoHeight = windowHeight;
+          videoWidth = videoHeight / videoAspectRatio;
+          $(this).css({'margin-top' : 0, 'margin-left' : -(videoWidth - windowWidth) / 2 + 'px'});
+
+          $(this).width(videoWidth).height(videoHeight);
+      }
+
+      $('.homepage-hero-module .video-container video').addClass('fadeIn animated');
+
+    });
+  }
+</script>
+<script src="js/parallax.js"></script>
+<script>var scene = $('#scene').get(0);
+var parallaxInstance = new Parallax(scene);</script>
+
+<!-- Настраиваем карту через JavaScript -->
+<script type="text/javascript">
+//создаем переменные "Карта" и "Метка"
+  ymaps.ready(init);
+  var myMap, 
+  myPlacemark;
+
+//Инициализируем нашу карту, задав ей координаты, устанавливаем масштаб карты
+  function init(){ 
+    myMap = new ymaps.Map("map", {
+      center: [59.928496, 30.356211],
+      zoom: 16,
+    }); 
+
+//Пишем свойства для нашей метки
+    myPlacemark = new ymaps.Placemark([59.928496, 30.356211], {
+      hintContent: '',
+      balloonContent: 'We are here!'
+    }, {
+            // Опции.
+            // Необходимо указать данный тип макета. Показываем что это изображение.
+            iconLayout: 'default#image',
+            // Своё изображение иконки метки. Указываем путь до картинки
+            iconImageHref: 'img/map_logo.png',
+            // Размеры метки. 
+            iconImageSize: [66, 66],
+            // Смещение левого верхнего угла иконки относительно её "ножки" (точки привязки).
+            iconImageOffset: [-33, -66]
+          });            
+    //Добавляем метку на карту + убираем скролл мышкой 
+    myMap.geoObjects.add(myPlacemark);  
+    myMap.behaviors.disable('scrollZoom');
+  }
+</script>
 
   </body>
 </html>
